@@ -16,6 +16,11 @@ namespace Celeste.Mod.Aqua.Miscellaneous
             return data;
         }
 
+        public static bool Has(object obj)
+        {
+            return _data.TryGetValue(obj, out _);
+        }
+
         static ConditionalWeakTable<object, DataContainer> _data = new ConditionalWeakTable<object, DataContainer>();
 
         public bool Has(string key)
@@ -46,6 +51,11 @@ namespace Celeste.Mod.Aqua.Miscellaneous
         public void Remove(string key)
         {
             _values.Remove(key);
+        }
+
+        public IReadOnlyDictionary<string, object> GetValues()
+        {
+            return _values;
         }
 
         public DataContainer() : this(32)

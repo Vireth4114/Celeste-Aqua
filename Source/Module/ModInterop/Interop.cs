@@ -16,6 +16,9 @@ namespace Celeste.Mod.Aqua.Module
             };
         }
 
+        public virtual void Initialize()
+        { }
+
         public Type GetType(string typeName)
         {
             if (_meta == null)

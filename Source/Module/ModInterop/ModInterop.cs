@@ -6,6 +6,7 @@ namespace Celeste.Mod.Aqua.Module
 {
     public static class ModInterop
     {
+        public static SpeedRunToolInterop SpeedRunTool => _interopSpeedRunTool;
         public static GravityHelperInterop GravityHelper => _interopGravityHelper;
         public static MaxHelpingHandInterop MaxHelpingHand => _interopMaxHelpingHand;
         public static FactoryHelperInterop FactoryHelper => _interopFactoryHelper;
@@ -174,11 +175,17 @@ namespace Celeste.Mod.Aqua.Module
             }
         }
 
-        public static void Initialize()
+        public static void Interop()
         {
             typeof(AquaExports).ModInterop();
+            _interopSpeedRunTool.Load();
             _interopGravityHelper.Load();
             _interopExtendedVariants.Load();
+        }
+
+        public static void Initialize()
+        {
+            _interopSpeedRunTool.Initialize();
         }
 
         public static void Uninitialize()
@@ -252,6 +259,7 @@ namespace Celeste.Mod.Aqua.Module
             _attachJumpThruType = VortexHelper.GetType("Celeste.Mod.VortexHelper.Entities.AttachedJumpThru");
         }
 
+        private static SpeedRunToolInterop _interopSpeedRunTool = new SpeedRunToolInterop();
         private static GravityHelperInterop _interopGravityHelper = new GravityHelperInterop();
         private static MaxHelpingHandInterop _interopMaxHelpingHand = new MaxHelpingHandInterop();
         private static FactoryHelperInterop _interopFactoryHelper = new FactoryHelperInterop();
