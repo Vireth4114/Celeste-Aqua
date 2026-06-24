@@ -11,7 +11,7 @@ namespace Celeste.Mod.Aqua.Core
     {
         public static IReadOnlyList<Edge> Edges(this Hitbox self)
         {
-            List<Edge> edges = DynamicData.For(self).Get<List<Edge>>("edges");
+            List<Edge> edges = DataContainer.For(self).Get<List<Edge>>("edges");
             if (edges == null)
             {
                 edges = new List<Edge>(4);
@@ -23,7 +23,7 @@ namespace Celeste.Mod.Aqua.Core
                 edges.Add(new Edge(tl, bl, -Vector2.UnitX));
                 edges.Add(new Edge(tr, br, Vector2.UnitX));
                 edges.Add(new Edge(bl, br, Vector2.UnitY));
-                DynamicData.For(self).Set("edges", edges);
+                DataContainer.For(self).Set("edges", edges);
             }
             return edges;
         }

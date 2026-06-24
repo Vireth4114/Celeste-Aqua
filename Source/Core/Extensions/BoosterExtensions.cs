@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste.Mod.Aqua.Miscellaneous;
+using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 using System;
@@ -30,7 +31,7 @@ namespace Celeste.Mod.Aqua.Core
             orig(self, position, red);
             self.Add(new HookInteractable(self.OnGrappleInteract));
             self.SetHookable(true);
-            DynamicData.For(self).Set("undraggable_routine", null);
+            DataContainer.For(self).Set("undraggable_routine", null);
         }
 
         private static void Booster_PlayerReleased(On.Celeste.Booster.orig_PlayerReleased orig, Booster self)
@@ -106,14 +107,18 @@ namespace Celeste.Mod.Aqua.Core
 
         private static void ResetPosition(this Booster self)
         {
-            self.Position = self.outline.Position;
+            if (DataContainer.For(self).Has("respawn_position"))
+            {
+                self.Position = DataContainer.For(self).Get<Vector2>("respawn_position");
+                DataContainer.For(self).Remove("respawn_position");
+            }
         }
 
         private static bool OnGrappleInteract(this Booster self, GrapplingHook hook, Vector2 at)
         {
             hook.Revoke();
             Audio.Play(self.red ? "event:/game/05_mirror_temple/redbooster_reappear" : "event:/game/04_cliffside/greenbooster_reappear", self.Position);
-            Coroutine routine = DynamicData.For(self).Get<Coroutine>("undraggable_routine");
+            Coroutine routine = DataContainer.For(self).Get<Coroutine>("undraggable_routine");
             if (routine == null)
             {
                 self.Add(routine = new Coroutine(self.UndraggableRoutine(self.sprite, Calc.SafeNormalize(at - self.Center), 0.4f, 8.0f)));

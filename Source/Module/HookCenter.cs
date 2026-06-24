@@ -27,6 +27,7 @@ namespace Celeste.Mod.Aqua.Module
             BumperExtensions.Initialize();
             RefillExtensions.Initialize();
             BoosterExtensions.Initialize();
+            FlyFeatherExtensions.Initialize();
             PufferExtensions.Initialize();
             FireBallExtensions.Initialize();
             FireBarrierExtensions.Initialize();
@@ -78,6 +79,7 @@ namespace Celeste.Mod.Aqua.Module
             BumperExtensions.Uninitialize();
             RefillExtensions.Uninitialize();
             BoosterExtensions.Uninitialize();
+            FlyFeatherExtensions.Uninitialize();
             PufferExtensions.Uninitialize();
             FireBallExtensions.Uninitialize();
             FireBarrierExtensions.Uninitialize();

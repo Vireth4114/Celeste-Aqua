@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.Entities;
+﻿using Celeste.Mod.Aqua.Miscellaneous;
+using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -107,6 +108,7 @@ namespace Celeste.Mod.Aqua.Core
                 _moveToward.Target = hook;
                 _moveToward.Active = true;
                 _grabbing = true;
+                DataContainer.For(this).Set("respawn_position", Position);
                 return true;
             }
             return false;

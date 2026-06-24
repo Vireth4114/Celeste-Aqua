@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.Entities;
+﻿using Celeste.Mod.Aqua.Miscellaneous;
+using Celeste.Mod.Entities;
 using MonoMod.Utils;
 
 namespace Celeste.Mod.Aqua.Core
@@ -76,12 +77,12 @@ namespace Celeste.Mod.Aqua.Core
 
         public static bool IsCassetteActive(this CassetteBlock self)
         {
-            return DynamicData.For(self).Get<bool>("cassette_active");
+            return DataContainer.For(self).Get<bool>("cassette_active");
         }
 
         private static void SetCassetteActive(this CassetteBlock self, bool active)
         {
-            DynamicData.For(self).Set("cassette_active", active);
+            DataContainer.For(self).Set("cassette_active", active);
         }
     }
 }

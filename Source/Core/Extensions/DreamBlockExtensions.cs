@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste.Mod.Aqua.Miscellaneous;
+using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 
@@ -24,7 +25,7 @@ namespace Celeste.Mod.Aqua.Core
         {
             orig(self, position, width, height, node, fastMoving, oneUse, below);
             self.Add(new HookInOut(self.OnHookIn, self.OnHookOut, self.OnHookKeepIn));
-            DynamicData.For(self).Set("hook_in_sound", new SoundSource());
+            DataContainer.For(self).Set("hook_in_sound", new SoundSource());
         }
 
         private static void DreamBlock_Added(On.Celeste.DreamBlock.orig_Added orig, DreamBlock self, Scene scene)
@@ -45,7 +46,7 @@ namespace Celeste.Mod.Aqua.Core
             if (self.playerHasDreamDash)
             {
                 Audio.Play("event:/char/madeline/dreamblock_enter");
-                SoundSource hookInSound = DynamicData.For(self).Get<SoundSource>("hook_in_sound");
+                SoundSource hookInSound = DataContainer.For(self).Get<SoundSource>("hook_in_sound");
                 hookInSound.Play("event:/char/madeline/dreamblock_travel");
             }
         }
@@ -56,13 +57,13 @@ namespace Celeste.Mod.Aqua.Core
             {
                 hook.EmitSpeedMultiplier /= DREAM_BLOCK_HOOK_ACCELERATION;
             }
-            SoundSource hookInSound = DynamicData.For(self).Get<SoundSource>("hook_in_sound");
+            SoundSource hookInSound = DataContainer.For(self).Get<SoundSource>("hook_in_sound");
             hookInSound.Stop();
         }
 
         private static void OnHookKeepIn(this DreamBlock self, GrapplingHook hook)
         {
-            SoundSource hookInSound = DynamicData.For(self).Get<SoundSource>("hook_in_sound");
+            SoundSource hookInSound = DataContainer.For(self).Get<SoundSource>("hook_in_sound");
             if (hook.State == GrapplingHook.HookStates.Fixed)
             {
                 hookInSound.Stop();

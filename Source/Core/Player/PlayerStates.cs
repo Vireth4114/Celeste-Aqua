@@ -218,8 +218,8 @@ namespace Celeste.Mod.Aqua.Core
             self.SetTimeTicker("dash_hanging_ticker", 0.05f);
             self.SetTimeTicker("boost_speed_save_ticker", 0.2f);
             self.SetTimeTicker("elec_shock_ticker", 0.5f);
-            DynamicData.For(self).Set("rope_is_loosen", true);
-            DynamicData.For(self).Set("is_booster_dash", false);
+            DataContainer.For(self).Set("rope_is_loosen", true);
+            DataContainer.For(self).Set("is_booster_dash", false);
             self.SetSlideState(SlideStates.None);
             self.SetFastBubbleMultiplier(1.0f);
             self.SetSpecialSwingDirection(0.0f);
@@ -227,7 +227,7 @@ namespace Celeste.Mod.Aqua.Core
             self.SetHookable(false);
             self.Add(new GrappleRelatedFields());
             var shootCheck = new ShotHookCheck(AquaModule.Settings.ThrowHookMode);
-            DynamicData.For(self).Set("shoot_check", shootCheck);
+            DataContainer.For(self).Set("shoot_check", shootCheck);
             Component gravityListener = ModInterop.GravityHelper.CreatePlayerGravityListener(OnGravityChanged);
             if (gravityListener != null)
                 self.Add(gravityListener);
@@ -246,7 +246,7 @@ namespace Celeste.Mod.Aqua.Core
                 }
             }
             _moveTimer.Reset();
-            DynamicData.For(self).Set("previous_facing", (int)self.Facing);
+            DataContainer.For(self).Set("previous_facing", (int)self.Facing);
         }
 
         private static void Player_Removed(On.Celeste.Player.orig_Removed orig, Player self, Scene scene)
@@ -520,14 +520,14 @@ namespace Celeste.Mod.Aqua.Core
             dashHangingTicker.Reset();
             if (self.CurrentBooster != null)
             {
-                DynamicData.For(self).Set("is_booster_dash", true);
+                DataContainer.For(self).Set("is_booster_dash", true);
             }
         }
 
         private static void Player_DashEnd(On.Celeste.Player.orig_DashEnd orig, Player self)
         {
             orig(self);
-            DynamicData.For(self).Set("is_booster_dash", false);
+            DataContainer.For(self).Set("is_booster_dash", false);
         }
 
         private static int Player_DashUpdate(On.Celeste.Player.orig_DashUpdate orig, Player self)
@@ -620,15 +620,15 @@ namespace Celeste.Mod.Aqua.Core
                 hook.SetRopeLengthLocked(true, self.Center);
                 hook.UserLockedLength = hook.LockedRadius;
             }
-            DynamicData.For(self).Set("climb_rope_direction", 0);
+            DataContainer.For(self).Set("climb_rope_direction", 0);
         }
 
         private static void Player_SwingEnd(this Player self)
         {
             var hook = self.GetGrappleHook();
             hook.SetRopeLengthLocked(false, self.Center);
-            DynamicData.For(self).Set("climb_rope_direction", 0);
-            DynamicData.For(self).Set("lift_speed_y", 0.0f);
+            DataContainer.For(self).Set("climb_rope_direction", 0);
+            DataContainer.For(self).Set("lift_speed_y", 0.0f);
         }
 
         private static int Player_SwingUpdate(this Player self)
@@ -703,7 +703,7 @@ namespace Celeste.Mod.Aqua.Core
                 }
             }
 
-            DynamicData.For(self).Set("climb_rope_direction", 0);
+            DataContainer.For(self).Set("climb_rope_direction", 0);
             if (ModInterop.GravityHelper.IsPlayerGravityInverted())
                 self.Speed.Y = -self.Speed.Y;
             self.HandleSwingSpeed(dt);
@@ -712,7 +712,7 @@ namespace Celeste.Mod.Aqua.Core
             bool ableToClimbUpDown = false;
             if (speedAlongRope >= 0.0f)
             {
-                DynamicData.For(self).Set("rope_is_loosen", false);
+                DataContainer.For(self).Set("rope_is_loosen", false);
                 float approxLen = hook.CalculateRopeLength(self.Center);
                 if (approxLen >= hook.LockedRadius - 1.5f)
                 {
@@ -731,7 +731,7 @@ namespace Celeste.Mod.Aqua.Core
             int inputY = Input.MoveY.Value;
             if (swingUp)
             {
-                DynamicData.For(self).Set("climb_rope_direction", MathF.Sign(inputY));
+                DataContainer.For(self).Set("climb_rope_direction", MathF.Sign(inputY));
             }
             if (inputY != 0 && swingUp && ableToClimbUpDown)
             {
@@ -803,12 +803,12 @@ namespace Celeste.Mod.Aqua.Core
             else
             {
                 float dt = Engine.DeltaTime;
-                DynamicData.For(self).Set("rope_is_loosen", true);
-                DynamicData.For(self).Set("previous_facing", (int)self.Facing);
+                DataContainer.For(self).Set("rope_is_loosen", true);
+                DataContainer.For(self).Set("previous_facing", (int)self.Facing);
                 _moveTimer.Update(dt);
                 //if (!PERMIT_SHOOT_STATES.Contains(self.StateMachine.State))
                 //{
-                //    DynamicData.For(self).Set("start_emitting", false);
+                //    DataContainer.For(self).Set("start_emitting", false);
                 //}
                 if (!self.CheckOnSlidable())
                     self.SetSlideState(SlideStates.None);
@@ -851,7 +851,7 @@ namespace Celeste.Mod.Aqua.Core
                     {
                         if (self.StateMachine.State == (int)AquaStates.StSwing)
                         {
-                            int climbRopeDirection = DynamicData.For(self).Get<int>("climb_rope_direction");
+                            int climbRopeDirection = DataContainer.For(self).Get<int>("climb_rope_direction");
                             float staminaCost = 0.0f;
                             if (climbRopeDirection < 0)
                             {
@@ -881,7 +881,7 @@ namespace Celeste.Mod.Aqua.Core
 
         private static void Player_WindMove(On.Celeste.Player.orig_WindMove orig, Player self, Vector2 move)
         {
-            if (!DynamicData.For(self).Get<bool>("rope_is_loosen"))
+            if (!DataContainer.For(self).Get<bool>("rope_is_loosen"))
                 return;
 
             orig(self, move);
@@ -973,7 +973,7 @@ namespace Celeste.Mod.Aqua.Core
                             }
                             break;
                         case SlideStates.Turning:
-                            if (DynamicData.For(self).Get<int>("previous_facing") == -(int)self.Facing)
+                            if (DataContainer.For(self).Get<int>("previous_facing") == -(int)self.Facing)
                             {
                                 self.Sprite.PlayFlipOnIce();
                             }
@@ -992,8 +992,8 @@ namespace Celeste.Mod.Aqua.Core
             else
             {
                 self.Sprite.Scale = Vector2.One;
-                int climbRopeDirection = DynamicData.For(self).Get<int>("climb_rope_direction");
-                if (DynamicData.For(self).Get<int>("previous_facing") == -(int)self.Facing)
+                int climbRopeDirection = DataContainer.For(self).Get<int>("climb_rope_direction");
+                if (DataContainer.For(self).Get<int>("previous_facing") == -(int)self.Facing)
                 {
                     self.Sprite.Play("aqua_hookflip", true);
                 }
@@ -1206,7 +1206,7 @@ namespace Celeste.Mod.Aqua.Core
                             grapple.AlongRopeSpeed = speedAlongRope;
                             if (speedAlongRope >= 0.0f)
                             {
-                                DynamicData.For(self).Set("rope_is_loosen", false);
+                                DataContainer.For(self).Set("rope_is_loosen", false);
                                 self.Speed = self.TurnToTangentSpeed(self.Speed, swingDirection);
                             }
                         }
@@ -1438,32 +1438,32 @@ namespace Celeste.Mod.Aqua.Core
 
         private static float GetFastBubbleMultiplier(this Player self)
         {
-            return DynamicData.For(self).Get<float>("fast_bubble_multiplier");
+            return DataContainer.For(self).Get<float>("fast_bubble_multiplier");
         }
 
         private static void SetFastBubbleMultiplier(this Player self, float multiplier)
         {
-            DynamicData.For(self).Set("fast_bubble_multiplier", multiplier);
+            DataContainer.For(self).Set("fast_bubble_multiplier", multiplier);
         }
 
         private static float GetSpecialSwingDirection(this Player self)
         {
-            return DynamicData.For(self).Get<float>("red_dash_swing_dir");
+            return DataContainer.For(self).Get<float>("red_dash_swing_dir");
         }
 
         private static void SetSpecialSwingDirection(this Player self, float direction)
         {
-            DynamicData.For(self).Set("red_dash_swing_dir", direction);
+            DataContainer.For(self).Set("red_dash_swing_dir", direction);
         }
 
         private static float GetSpecialSwingSpeed(this Player self)
         {
-            return DynamicData.For(self).Get<float>("red_dash_swing_speed");
+            return DataContainer.For(self).Get<float>("red_dash_swing_speed");
         }
 
         private static void SetSpecialSwingSpeed(this Player self, float speed)
         {
-            DynamicData.For(self).Set("red_dash_swing_speed", speed);
+            DataContainer.For(self).Set("red_dash_swing_speed", speed);
         }
 
         private static void OnGravityChanged(Player player, int gravity, float momentumModifier)

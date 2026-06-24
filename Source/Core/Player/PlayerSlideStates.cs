@@ -48,12 +48,12 @@ namespace Celeste.Mod.Aqua.Core
 
         public static SlideStates GetSlideState(this Player self)
         {
-            return DynamicData.For(self).Get<SlideStates>("slide_state");
+            return DataContainer.For(self).Get<SlideStates>("slide_state");
         }
 
         private static void SetSlideState(this Player self, SlideStates state)
         {
-            DynamicData.For(self).Set("slide_state", state);
+            DataContainer.For(self).Set("slide_state", state);
         }
 
         private static bool CheckOnSlidable(this Player self)

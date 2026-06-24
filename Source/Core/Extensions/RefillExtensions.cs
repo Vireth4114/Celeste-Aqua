@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste.Mod.Aqua.Miscellaneous;
+using Microsoft.Xna.Framework;
 using MonoMod.Utils;
 
 namespace Celeste.Mod.Aqua.Core
@@ -22,13 +23,12 @@ namespace Celeste.Mod.Aqua.Core
         private static void Refill_Construct(On.Celeste.Refill.orig_ctor_Vector2_bool_bool orig, Refill self, Vector2 position, bool twoDashes, bool oneUse)
         {
             orig(self, position, twoDashes, oneUse);
-            self.SetRespawnPosition(self.Position);
         }
 
         private static void Refill_Update(On.Celeste.Refill.orig_Update orig, Refill self)
         {
             orig(self);
-            if (self.IsHookable())
+            if (self.IsHookable() && HasRespawnPosition(self))
             {
                 self.outline.Position = self.GetRespawnPosition() - self.Position;
             }
@@ -36,7 +36,11 @@ namespace Celeste.Mod.Aqua.Core
 
         private static void Refill_Respawn(On.Celeste.Refill.orig_Respawn orig, Refill self)
         {
-            self.Position = self.GetRespawnPosition();
+            if (HasRespawnPosition(self))
+            {
+                self.Position = self.GetRespawnPosition();
+                DataContainer.For(self).Remove("respawn_position");
+            }
             orig(self);
             if (self is CustomRefill refill && refill.SyncHoldableContainer)
             {
@@ -49,14 +53,14 @@ namespace Celeste.Mod.Aqua.Core
             }
         }
 
-        public static Vector2 GetRespawnPosition(this Refill self)
+        public static bool HasRespawnPosition(this Refill self)
         {
-            return DynamicData.For(self).Get<Vector2>("respawn_position");
+            return DataContainer.For(self).Has("respawn_position");
         }
 
-        public static void SetRespawnPosition(this Refill self, Vector2 pos)
+        public static Vector2 GetRespawnPosition(this Refill self)
         {
-            DynamicData.For(self).Set("respawn_position", pos);
+            return DataContainer.For(self).Get<Vector2>("respawn_position");
         }
     }
 }

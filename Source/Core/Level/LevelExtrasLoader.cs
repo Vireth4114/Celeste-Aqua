@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.Aqua.Debug;
+using Celeste.Mod.Aqua.Miscellaneous;
 using MonoMod.Utils;
 
 namespace Celeste.Mod.Aqua.Core
@@ -40,12 +41,12 @@ namespace Celeste.Mod.Aqua.Core
 
         public static LevelExtras? GetExtraMeta(this AreaData self)
         {
-            return DynamicData.For(self).Get<LevelExtras?>("extra_meta");
+            return DataContainer.For(self).Get<LevelExtras?>("extra_meta");
         }
 
         public static void SetExtraMeta(this AreaData self, LevelExtras? extras)
         {
-            DynamicData.For(self).Set("extra_meta", extras);
+            DataContainer.For(self).Set("extra_meta", extras);
         }
     }
 }

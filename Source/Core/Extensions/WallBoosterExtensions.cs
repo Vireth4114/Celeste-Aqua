@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste.Mod.Aqua.Miscellaneous;
+using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 using System;
@@ -23,7 +24,7 @@ namespace Celeste.Mod.Aqua.Core
         {
             orig(self, position, height, left, notCoreMode);
             self.SetHookable(true);
-            DynamicData.For(self).Set("post_move_patch", (Action<Vector2>)self.PostMove);
+            DataContainer.For(self).Set("post_move_patch", (Action<Vector2>)self.PostMove);
         }
 
         private static void WallBooster_Update(On.Celeste.WallBooster.orig_Update orig, WallBooster self)

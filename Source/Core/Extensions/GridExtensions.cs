@@ -113,22 +113,22 @@ namespace Celeste.Mod.Aqua.Core
 
         public static IReadOnlyList<RopePivot> ConvexPoints(this Grid self)
         {
-            List<RopePivot> pivots = DynamicData.For(self).Get<List<RopePivot>>("convex_points");
+            List<RopePivot> pivots = DataContainer.For(self).Get<List<RopePivot>>("convex_points");
             if (pivots == null)
             {
                 pivots = self.FindConvexPoints();
-                DynamicData.For(self).Set("convex_points", pivots);
+                DataContainer.For(self).Set("convex_points", pivots);
             }
             return pivots;
         }
 
         public static IReadOnlyList<Edge> Edges(this Grid self)
         {
-            List<Edge> edges = DynamicData.For(self).Get<List<Edge>>("edges");
+            List<Edge> edges = DataContainer.For(self).Get<List<Edge>>("edges");
             if (edges == null)
             {
                 edges = self.FindEdges();
-                DynamicData.For(self).Set("edges", edges);
+                DataContainer.For(self).Set("edges", edges);
             }
             return edges;
         }
