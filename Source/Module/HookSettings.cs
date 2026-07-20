@@ -133,6 +133,24 @@ namespace Celeste.Mod.Aqua.Module
 
         private int _actorPullForce = 360;
 
+        [SettingName("SETTINGS_SHOOT_FREEZE_TIME")]
+        [SettingRange(0, 1000, true)]
+        [DefaultValue(0)]
+        public int ShootFreezeTime
+        {
+            get => _shootFreezeTime;
+            set
+            {
+                if (_shootFreezeTime != value)
+                {
+                    _shootFreezeTime = value;
+                    ParameterChanged?.Invoke("ShootFreezeTime", _shootFreezeTime);
+                }
+            }
+        }
+
+        private int _shootFreezeTime = 0;
+
         public HookSettings()
         {
             Reset();

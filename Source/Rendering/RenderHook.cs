@@ -75,10 +75,10 @@ namespace Celeste.Mod.Aqua.Rendering
         {
             orig(self);
             var bgRenderer = new CustomBackgroundRenderer();
-            DataContainer.For(self.Level).Set("custom_bg_renderer", bgRenderer);
+			DynamicData.For(self.Level).Set("custom_bg_renderer", bgRenderer);
             self.Level.Add(bgRenderer);
             var fgRenderer = new CustomForegroundRenderer();
-            DataContainer.For(self.Level).Set("custom_fg_renderer", fgRenderer);
+			DynamicData.For(self.Level).Set("custom_fg_renderer", fgRenderer);
             self.Level.Add(fgRenderer);
         }
 
@@ -94,7 +94,7 @@ namespace Celeste.Mod.Aqua.Rendering
         private static void Scene_Construct(On.Monocle.Scene.orig_ctor orig, Scene self)
         {
             orig(self);
-            DataContainer.For(self).Set("time", 0.0f);
+			DynamicData.For(self).Set("time", 0.0f);
         }
 
         private static void Scene_Update(On.Monocle.Scene.orig_Update orig, Scene self)
@@ -102,12 +102,12 @@ namespace Celeste.Mod.Aqua.Rendering
             orig(self);
             float time = self.GetTime();
             time += Engine.DeltaTime;
-            DataContainer.For(self).Set("time", time);
+			DynamicData.For(self).Set("time", time);
         }
 
         private static void RenderBackground(this Level self)
         {
-            CustomBackgroundRenderer bgRenderer = DataContainer.For(self).Get<CustomBackgroundRenderer>("custom_bg_renderer");
+            CustomBackgroundRenderer bgRenderer = DynamicData.For(self).Get<CustomBackgroundRenderer>("custom_bg_renderer");
             if (bgRenderer != null)
             {
                 bgRenderer.Render(self);
@@ -116,7 +116,7 @@ namespace Celeste.Mod.Aqua.Rendering
 
         private static void RenderForeground(this Level self)
         {
-            CustomForegroundRenderer fgRenderer = DataContainer.For(self).Get<CustomForegroundRenderer>("custom_fg_renderer");
+            CustomForegroundRenderer fgRenderer = DynamicData.For(self).Get<CustomForegroundRenderer>("custom_fg_renderer");
             if (fgRenderer != null)
             {
                 fgRenderer.Render(self);
@@ -130,7 +130,7 @@ namespace Celeste.Mod.Aqua.Rendering
 
         public static float GetTime(this Scene self)
         {
-            return DataContainer.For(self).Get<float>("time");
+            return DynamicData.For(self).Get<float>("time");
         }
 
         private static MethodInfo _methodRender;

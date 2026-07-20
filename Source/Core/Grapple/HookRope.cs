@@ -547,9 +547,11 @@ namespace Celeste.Mod.Aqua.Core
 
             List<Entity> solids = Scene.Tracker.GetEntities<Solid>();
             SortedSet<PivotCandidate> potentials = new SortedSet<PivotCandidate>(PivotComparer);
+            var ropeCircle = new Circle(ropeSeg.Length * 4.0f, prevPivot.point.X, prevPivot.point.Y);
             foreach (Solid solid in solids)
             {
                 if (!solid.Collidable || solid.Collider == null || !solid.IsHookable()) continue;
+                if (!solid.Collider.Collide(ropeCircle)) continue;
                 CheckCollisionSolid(ropeSeg, lastSegments, solid, potentials);
             }
             while (potentials.Count > 0)

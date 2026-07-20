@@ -7,6 +7,7 @@ local PARAMETER_OPTIONS = {
     "EmitSpeed",
     "MaxLineSpeed",
     "FlyTowardSpeed",
+    "ShootFreezeTime",
     "ActorPullForce",
     "SwingJumpStaminaCost",
     "DisableGrappleBoost",

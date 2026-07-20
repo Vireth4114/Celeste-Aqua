@@ -75,6 +75,16 @@ namespace Celeste.Mod.Aqua.Module
             }
         }
 
+        public static IReadOnlyList<Type> RequireMovementPatchSolidTypes
+        {
+            get
+            {
+                if (_requireMovementPatchSolidTypes == null)
+                    CacheModTypes();
+                return _requireMovementPatchSolidTypes;
+            }
+        }
+
         public static Type ConveyorType
         {
             get
@@ -248,6 +258,11 @@ namespace Celeste.Mod.Aqua.Module
             if (dashBumper != null)
                 bumperTypes.Add(dashBumper);
             _bumperTypes = bumperTypes.ToArray();
+            var requireMovementPatchTypes = new List<Type>(4);
+            Type connectedMoveBlock = CommunalHelper.GetType("Celeste.Mod.CommunalHelper.Entities.ConnectedMoveBlock");
+            if (connectedMoveBlock != null)
+                requireMovementPatchTypes.Add(connectedMoveBlock);
+            _requireMovementPatchSolidTypes = requireMovementPatchTypes.ToArray();
             _conveyorType = FactoryHelper.GetType("FactoryHelper.Entities.Conveyor");
             _holdableContainerType = EeveeHelper.GetType("Celeste.Mod.EeveeHelper.Entities.HoldableContainer");
             _containerRefType = EeveeHelper.GetType("Celeste.Mod.EeveeHelper.Components.ContainerRefComponent");
@@ -277,6 +292,7 @@ namespace Celeste.Mod.Aqua.Module
         private static Type[] _springTypes;
         private static Type[] _electricEntityTypes;
         private static Type[] _bumperTypes;
+        private static Type[] _requireMovementPatchSolidTypes;
         private static Type _conveyorType;
         private static Type _holdableContainerType;
         private static Type _containerRefType;

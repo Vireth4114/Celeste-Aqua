@@ -40,7 +40,9 @@ namespace Celeste.Mod.Aqua.Core
                         if (grapple.Top > self.Top)
                         {
                             float movement = MathF.Min(160.0f * Engine.DeltaTime, grapple.Top - self.Top);
-                            grapple.AddMovement(Vector2.UnitY * -movement);
+                            Vector2 finalExactMovement = Vector2.UnitY * -movement;
+                            Vector2 finalMovement = new Vector2((int)finalExactMovement.X, (int)finalExactMovement.Y);
+                            grapple.PivotsFollowAttachment(self, finalExactMovement, finalMovement);
                         }
                     }
                 }

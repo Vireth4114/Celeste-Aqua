@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using Monocle;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Celeste.Mod.Aqua.Miscellaneous
 {
     public class DataContainer
     {
-        public static DataContainer For(object obj)
+        public static DataContainer For(Entity obj)
         {
             DataContainer data;
             if (!_data.TryGetValue(obj, out data))
@@ -16,12 +17,12 @@ namespace Celeste.Mod.Aqua.Miscellaneous
             return data;
         }
 
-        public static bool Has(object obj)
+        public static bool Has(Entity obj)
         {
             return _data.TryGetValue(obj, out _);
         }
 
-        static ConditionalWeakTable<object, DataContainer> _data = new ConditionalWeakTable<object, DataContainer>();
+        static ConditionalWeakTable<Entity, DataContainer> _data = new ConditionalWeakTable<Entity, DataContainer>();
 
         public bool Has(string key)
         {

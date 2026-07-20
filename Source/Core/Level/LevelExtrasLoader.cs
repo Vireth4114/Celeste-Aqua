@@ -41,12 +41,12 @@ namespace Celeste.Mod.Aqua.Core
 
         public static LevelExtras? GetExtraMeta(this AreaData self)
         {
-            return DataContainer.For(self).Get<LevelExtras?>("extra_meta");
+            return DynamicData.For(self).Get<LevelExtras?>("extra_meta");
         }
 
         public static void SetExtraMeta(this AreaData self, LevelExtras? extras)
         {
-            DataContainer.For(self).Set("extra_meta", extras);
+			DynamicData.For(self).Set("extra_meta", extras);
         }
     }
 }

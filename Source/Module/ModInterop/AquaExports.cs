@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.ModInterop;
 using System;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.Aqua.Module
 {
@@ -47,6 +48,14 @@ namespace Celeste.Mod.Aqua.Module
                 e.Revoke();
         }
 
+        public static void AddPredictMovementForGrapple(Entity hook, Entity attachedEntity, Vector2 movement)
+        {
+            if (hook is GrapplingHook e && e.Active && e.State == GrapplingHook.HookStates.Fixed)
+            {
+                e.PivotsFollowAttachment(attachedEntity, movement, new Vector2((int)movement.X, (int)movement.Y));
+            }
+        }
+
         public static bool IsEntityHookable(Entity entity)
         {
             return entity.IsHookable();
@@ -65,6 +74,19 @@ namespace Celeste.Mod.Aqua.Module
         public static bool IsIntersectsWithRope(Entity entity)
         {
             return entity.IntersectsWithRope();
+        }
+
+        public static void GetAttachingGrapples(Entity entity, IList<Entity> results)
+        {
+            var players = entity.Scene.Tracker.GetEntities<Player>();
+            foreach (Player player in players)
+            {
+                var grapple = player.GetGrappleHook();
+                if (grapple != null && grapple.Active && grapple.State == GrapplingHook.HookStates.Fixed && grapple.AttachedEntity == entity)
+                {
+                    results.Add(grapple);
+                }
+            }
         }
 
         public static void SetEntityAttachCallbacks(Entity entity, Action<Entity> onAttach, Action<Entity> onDetach)

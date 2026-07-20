@@ -258,6 +258,9 @@ namespace Celeste.Mod.Aqua.Core
                         case "ActorPullForce":
                             state.HookSettings.ActorPullForce = value;
                             break;
+                        case "ShootFreezeTime":
+                            state.HookSettings.ShootFreezeTime = value;
+                            break;
                         case "SwingJumpStaminaCost":
                             state.HookSettings.SwingJumpStaminaCost = value;
                             break;

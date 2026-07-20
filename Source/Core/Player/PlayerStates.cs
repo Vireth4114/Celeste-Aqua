@@ -866,7 +866,7 @@ namespace Celeste.Mod.Aqua.Core
                     }
                 }
             }
-            self.GetShootHookCheck().Update();
+            self.GetShootHookCheck()?.Update();
             {
                 GrapplingHook hook = self.GetGrappleHook();
                 if (hook != null)

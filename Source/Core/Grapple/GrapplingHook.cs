@@ -171,11 +171,6 @@ namespace Celeste.Mod.Aqua.Core
             return other.IsHookable();
         }
 
-        public void AddMovement(Vector2 movement)
-        {
-            _movementCounter += movement;
-        }
-
         public void PivotsFollowAttachment(Entity entity, Vector2 exactMovement, Vector2 pixelMovement)
         {
             if (State != HookStates.Fixed)
@@ -222,6 +217,10 @@ namespace Celeste.Mod.Aqua.Core
 
             _sprite.Play(HookSprite.Emit, true);
             _sprite.Rotation = _elecShockSprite.Rotation = direction.Angle();
+            if (AquaModule.Settings.HookSettings.ShootFreezeTime > 0)
+            {
+                Celeste.Freeze((float)AquaModule.Settings.HookSettings.ShootFreezeTime / 1000.0f);
+            }
         }
 
         public void Revoke()
@@ -711,6 +710,11 @@ namespace Celeste.Mod.Aqua.Core
             {
                 _sprite.Rotation = BouncingVelocity.Angle();
             }
+        }
+
+        private void AddMovement(Vector2 movement)
+        {
+            _movementCounter += movement;
         }
 
         private void CheckHookColliders()

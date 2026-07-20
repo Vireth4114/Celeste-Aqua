@@ -23,6 +23,7 @@ namespace Celeste.Mod.Aqua.Core
         private static void Solid_Awake(On.Celeste.Solid.orig_Awake orig, Solid self, Scene scene)
         {
             orig(self, scene);
+            self.PatchSolidsRequireMovements();
             self.WorkWithConveyor();
         }
 
@@ -34,6 +35,30 @@ namespace Celeste.Mod.Aqua.Core
                     return false;
             }
             return true;
+        }
+
+        private static void PatchSolidsRequireMovements(this Solid self)
+        {
+            if (ModInterop.RequireMovementPatchSolidTypes == null || ModInterop.RequireMovementPatchSolidTypes.Count == 0)
+                return;
+            foreach (var type in ModInterop.RequireMovementPatchSolidTypes)
+            {
+                if (self.GetType().IsAssignableTo(type))
+                {
+                    self.Add(new GrapplingHookAttachBehavior(PatchGrappleMovementOnSolid));
+                }
+            }
+        }
+
+        private static void PatchGrappleMovementOnSolid(Entity connectedMoveBlock, GrapplingHook hook)
+        {
+            Solid solid = connectedMoveBlock as Solid;
+            if (!hook.Active || hook.AttachedEntity != connectedMoveBlock)
+            {
+                return;
+            }
+            Vector2 movement = solid.Position - solid.GetPreviousPosition();
+            hook.PivotsFollowAttachment(solid, movement, new Vector2((int)movement.X, (int)movement.Y));
         }
 
         private static void WorkWithConveyor(this Solid self)
@@ -69,14 +94,18 @@ namespace Celeste.Mod.Aqua.Core
                     Vector2 movement = speed * dt * Vector2.UnitX;
                     Vector2 targetPos = hook.ExactPosition + movement;
                     targetPos.X = MathF.Min(targetPos.X, conveyor.Right - hookSize * 0.5f);
-                    hook.AddMovement(targetPos - hook.ExactPosition);
+                    Vector2 grappleExactMovement = targetPos - hook.ExactPosition;
+                    Vector2 grappleMovement = new Vector2((int)grappleExactMovement.X, (int)grappleExactMovement.Y);
+                    hook.PivotsFollowAttachment(conveyor, grappleExactMovement, grappleMovement);
                 }
                 else if (!movingLeft && hook.Left >= conveyor.Left)
                 {
                     Vector2 movement = -speed * dt * Vector2.UnitX;
                     Vector2 targetPos = hook.ExactPosition + movement;
                     targetPos.X = MathF.Max(targetPos.X, conveyor.Left + hookSize * 0.5f);
-                    hook.AddMovement(targetPos - hook.ExactPosition);
+                    Vector2 grappleExactMovement = targetPos - hook.ExactPosition;
+                    Vector2 grappleMovement = new Vector2((int)grappleExactMovement.X, (int)grappleExactMovement.Y);
+                    hook.PivotsFollowAttachment(conveyor, grappleExactMovement, grappleMovement);
                 }
             }
             else if (hook.Bottom == conveyor.Top)
@@ -86,14 +115,18 @@ namespace Celeste.Mod.Aqua.Core
                     Vector2 movement = -speed * dt * Vector2.UnitX;
                     Vector2 targetPos = hook.ExactPosition + movement;
                     targetPos.X = MathF.Max(targetPos.X, conveyor.Left + hookSize * 0.5f);
-                    hook.AddMovement(targetPos - hook.ExactPosition);
+                    Vector2 grappleExactMovement = targetPos - hook.ExactPosition;
+                    Vector2 grappleMovement = new Vector2((int)grappleExactMovement.X, (int)grappleExactMovement.Y);
+                    hook.PivotsFollowAttachment(conveyor, grappleExactMovement, grappleMovement);
                 }
                 else if (!movingLeft && hook.Right <= conveyor.Right)
                 {
                     Vector2 movement = speed * dt * Vector2.UnitX;
                     Vector2 targetPos = hook.ExactPosition + movement;
                     targetPos.X = MathF.Min(targetPos.X, conveyor.Right - hookSize * 0.5f);
-                    hook.AddMovement(targetPos - hook.ExactPosition);
+                    Vector2 grappleExactMovement = targetPos - hook.ExactPosition;
+                    Vector2 grappleMovement = new Vector2((int)grappleExactMovement.X, (int)grappleExactMovement.Y);
+                    hook.PivotsFollowAttachment(conveyor, grappleExactMovement, grappleMovement);
                 }
             }
         }

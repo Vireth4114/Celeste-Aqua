@@ -78,6 +78,12 @@ namespace Celeste.Mod.Aqua.Core
                         state.HookSettings.ActorPullForce = Calc.Clamp(pullForce, 300, 600);
                     }
                     break;
+                case "ShootFreezeTime":
+                    if (int.TryParse(Value, out int freezeTime))
+                    {
+                        state.HookSettings.ShootFreezeTime = Calc.Clamp(freezeTime, 0, 1000);
+                    }
+                    break;
                 case "SwingJumpStaminaCost":
                     if (int.TryParse(Value, out int swingJumpStamina))
                     {
