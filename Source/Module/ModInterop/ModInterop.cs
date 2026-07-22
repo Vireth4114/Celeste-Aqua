@@ -259,9 +259,9 @@ namespace Celeste.Mod.Aqua.Module
                 bumperTypes.Add(dashBumper);
             _bumperTypes = bumperTypes.ToArray();
             var requireMovementPatchTypes = new List<Type>(4);
-            Type connectedMoveBlock = CommunalHelper.GetType("Celeste.Mod.CommunalHelper.Entities.ConnectedMoveBlock");
-            if (connectedMoveBlock != null)
-                requireMovementPatchTypes.Add(connectedMoveBlock);
+            //Type connectedMoveBlock = CommunalHelper.GetType("Celeste.Mod.CommunalHelper.Entities.ConnectedMoveBlock");
+            //if (connectedMoveBlock != null)
+            //    requireMovementPatchTypes.Add(connectedMoveBlock);
             _requireMovementPatchSolidTypes = requireMovementPatchTypes.ToArray();
             _conveyorType = FactoryHelper.GetType("FactoryHelper.Entities.Conveyor");
             _holdableContainerType = EeveeHelper.GetType("Celeste.Mod.EeveeHelper.Entities.HoldableContainer");
